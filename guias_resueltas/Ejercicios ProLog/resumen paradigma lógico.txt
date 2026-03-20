@@ -1,0 +1,336 @@
+Funciones
+
+miembro\3
+miembro_back\3: funcion miembro pero si le paso variable devuelve todos los elementos
+agregar\3
+agregar_si\3
+insertar_ord\3
+ordenar\2
+count_elem\3
+eliminar_dup\2
+eliminar\3
+size\2
+sumar\2
+concatenar\3
+factorial\2
+busca_y_reemp\4
+positivos\2
+suma_lista\3
+union\3: devuelve la union de dos conjuntos
+interseccion\3: devuelve la interseccion de dos conjuntos
+diferencia\3: devuelve la diferencia entre dos conjuntos
+caminos\2: caminos de un arbol
+inversalista
+--------------------------------------------------------------------------
+cabecera (X,Y):-
+             regla1(x),
+             regla2(x),
+             regla3(x).
+:- es la implicacion
+, es la conjunción
+. es el final de la sentencia
+para que se cumpla la cabecera tienen que cumplirse todas las reglas
+
+Comparaciones
+X<Y - X menor que Y
+X>Y - X mayor que Y
+  - X menor o igual que Y
+X>=Y - X mayor o igual que Y
+X=Y - X es igual que Y
+X\=Y - X es distinto que Y
+
+---------------------------------------------------------------------
+
+%miembro\3: verifica si el elemento pasado está en la lista pasada
+miembro(X,[X|_]):- !.
+miembro(X,[_|Resto]):-
+	miembro(X,Resto).
+
+---------------------------------------------------------------------
+
+%miembro_back\3: verifica si el elemento pasado está en la lista pasada
+%si se le pasa una variable, devuelve por back_tracking todos los elementos
+
+miembro(X,[X|_]).
+miembro(X,[_|Resto]):-
+	miembro(X,Resto).
+
+---------------------------------------------------------------------
+%agregar\3:agrega un elemento a una lista
+
+
+agregar(X,[],[X]):-!.
+
+agregar(X,[X|Res],[X|Res]):-!.
+
+agregar(X,[Y|L],[Y|Res]):-
+	agregar(X,L,Res),
+	!.
+
+---------------------------------------------------------------------
+%agregar_si\3: agrega al final de la lista cuando no sea miembro
+
+agregar_si(X,[],[X]):- !.
+
+agregar_si(X,[X|L],[X|L]):-
+	!.
+
+agregar_si(X,[Y|L],[Y|Res]):-
+    	agregar_si(X,L,Res).
+
+
+---------------------------------------------------------------------
+
+%insertar_ord\3: inserta en una lista ordenada
+
+insertar_ord(X,[],[X]).
+insertar_ord(X,[X2|L],[X2|R]):-
+	X > X2,
+	insertar_ord(X,L,R).
+
+insertar_ord(X,[X2|L],[X,X2|L]):-
+	X =< X2.
+
+---------------------------------------------------------------------
+
+%ordenar\2: ordena lista de numeros
+
+insertar(X,[],[X]).
+insertar(X,[X2|L],[X2|R]):-
+	X > X2,
+	insertar(X,L,R).
+
+insertar(X,[X2|L],[X,X2|L]):-
+	X =< X2.
+
+ordenar([],[]).
+ordenar([X|L1],ListaOrdenada):-
+	ordenar(L1,L2),
+	insertar(X,L2,ListaOrdenada).
+
+----------------------------------------------------------------------
+
+%count_elem\3: cuente la cantidad de veces que aparece un elemento en una lista.
+
+countelem(_,[],0):- !.
+countelem(X,[Y|L],Cant):-
+	X=Y,
+	countelem(X,L,R2),
+	Cant is R2+1,
+	!.
+
+countelem(X,[Y|L],Cant):-
+	X\=Y,
+	countelem(X,L,Cant),
+	!.
+----------------------------------------------------------------------
+
+%eliminar_dup\2: elimina los duplicados de una lista
+
+eliminar(_,[],[]):-!.
+eliminar(X,[Y|L],Lres):-
+	X=Y,
+	eliminar(X,L,Lres),
+	!.
+eliminar(X,[Y|L],[Y|Lres]):-
+	X\=Y,
+	eliminar(X,L,Lres),
+	!.
+
+eliminar_dup([],[]):-!.
+eliminar_dup([X|L],[X|SinDup]):-
+	eliminar(X,L,L2),
+	eliminar_dup(L2,SinDup),
+	!.
+
+-----------------------------------------------------------
+%eliminar\3: elimina el elemento pasado de la lista pasada.
+%Elimina todas las repeticiones
+
+eliminar(_,[],[]):-!.
+eliminar(X,[Y|L],Lres):-
+	X=Y,
+	eliminar(X,L,Lres),
+	!.
+eliminar(X,[Y|L],[Y|Lres]):-
+	X\=Y,
+	eliminar(X,L,Lres),
+	!.
+
+------------------------------------------------------------
+%size\2: cantidad de elementos de una lista
+
+size([],0):-!.
+size([A|B],R):-
+	size(B,R2),
+	R is R2 + 1.
+	
+------------------------------------------------------------
+
+%sumar\2:devuelve la suma de los elementos de una lista
+sumar([],0):-!.
+sumar([A|B],R):-
+	sumar(B,R2),
+	R is R2 + 1.
+	
+
+------------------------------------------------------------
+%concatenar\3: concatena y hace la función de backtracking para agregar
+
+concatenar([],L2,L2).
+concatenar([X|L1],L2,[X|L3]):-
+	concatenar(L1,L2,L3).
+
+------------------------------------------------------------
+
+%factorial\2: factorial xd
+
+factorial(0,1):-!
+factorial(X,R):-
+	X>0,
+	Aux is X-1,
+	factorial(Aux,R1),
+	R is X*R1.
+
+------------------------------------------------------------
+
+%busca_y_reemp\4: busca las apariciones del primer elemento
+%y las reemplaza por el segundo, en la lista que es 3er 
+%argumento, y devuelve en el ult argumento
+
+
+busca_y_reemp(X,Sust,[],[]):- !.
+busca_y_reemp(X,Sust,[X|L],[Sust|Res]):-
+	busca_y_reemp(X,Sust,L,Res),
+	!.
+busca_y_reemp(X,Sust,[Y|L],[Y|Res]):-
+	busca_y_reemp(X,Sust,L,Res),
+	!.
+
+---------------------------------------------------------------
+
+%positivos\2:dada una lista de números enteros, 
+%retorne otra lista solo con los números positivos de la misma.
+
+positivos([],[]):-
+	!.
+positivos([X|L],[X|Listapos]):-
+	X>0,
+	positivos(L,Listapos),
+	!.
+positivos([X|L],Listapos):-
+	X=<0,
+	positivos(L,Listapos),
+	!.
+
+---------------------------------------------------------------
+
+%suma_lista\3: suma elemento a elemento de ambas listas.
+
+size([],0):-!.
+size([A|B],R):-
+	size(B,R2),
+	R is R2 + 1,
+	!.
+
+
+suma_lista([],[],[]).
+suma_lista(L1,L2,Res):-
+	size(L1, R1),
+	size(L2,R2),
+	R1\=R2,
+	!,
+	fail.
+
+suma_lista([X|L1],[Y|L2],[R|Res]):-
+	size(L1,R1),
+	size(L2,R2),
+	R1=R2,
+	suma_lista(L1,L2,Res),
+	R is X+Y,
+	!.
+
+----------------------------------------------------------------
+
+%union\3: devuelve la union de dos conjuntos
+
+eliminar(_,[],[]):-!.
+eliminar(X,[X|L],Lres):-
+	eliminar(X,L,Lres),
+	!.
+eliminar(X,[Y|L],[Y|Lres]):-
+	eliminar(X,L,Lres),
+	!.
+
+eliminar_dup([],[]):-!.
+eliminar_dup([X|L],[X|SinDup]):-
+	eliminar(X,L,L2),
+	eliminar_dup(L2,SinDup),
+	!.
+
+concatenar([],L2,L2).
+concatenar([X|L1],L2,[X|L3]):-
+	concatenar(L1,L2,L3).
+union(L1,L2,Res):-
+	concatenar(L1,L2,Res1),
+	eliminar_dup(Res1,Res).
+
+----------------------------------------------------------------
+
+%interseccion\3: devuelve la interseccion de dos conjuntos
+
+miembro(X,[X|_]):- !.
+miembro(X,[_|Resto]):-
+	miembro(X,Resto).
+
+
+interseccion([],[],[]):- !.
+interseccion([_],[],[]):-
+	!.
+interseccion([],L2,[]):- !.
+
+interseccion([X|L1],L2,[X|Res]):-
+	miembro(X,L2),
+	interseccion(L1,L2,Res),
+	!.
+
+interseccion([X|L1],L2,Res):-
+	interseccion(L1,L2,Res).
+
+
+----------------------------------------------------------------
+%diferencia\3: devuelve la diferencia entre dos conjuntos
+
+eliminar(_,[],[]):-!.
+eliminar(X,[X|L],Lres):-
+	eliminar(X,L,Lres),
+	!.
+eliminar(X,[Y|L],[Y|Lres]):-
+	eliminar(X,L,Lres),
+	!.
+
+
+diferencia(L1,[],L1):- !.
+diferencia([],_,[]):- !.
+
+diferencia(L1,[Y|L2],Dif):-
+	eliminar(Y,L1,Dif2),
+	diferencia(Dif2,L2,Dif).
+
+---------------------------------------------------------------------
+caminos\3: devuelve los caminos de un arbol
+ej:caminos_max([1, [1, [2], [7]], [2, [1], [4]], [3, [2], [5]]], L).
+
+miembro(X,[X|_]).
+miembro(X,[_|Resto]):-
+	miembro(X,Resto).
+
+caminos([X], [X]):-!.
+caminos([X|L], [X|L1]) :- miembro(C, L), caminos(C, L1).
+
+---------------------------------------------------------------------
+concatenar([],L,L).
+concatenar([X|L1],L2,[X|L3]):- concatenar(L1,L2,L3).
+
+inversa([],[]).
+inversa([X|L1],L) :- inversa(L1,Resto), concatenar(Resto,[X],L).

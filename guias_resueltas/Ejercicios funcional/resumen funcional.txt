@@ -1,0 +1,188 @@
+Funciones importantes DrRacket
+
+tamaño
+concatenar
+potencia
+factorial
+invertir
+count-elem: cantidad de apariciones en una lista
+buscarEn: está en la lista?
+agregaralfinal
+eliminar: elimina todas las apariciones de a en una lista 0
+ordenarListaDeNumeros
+mayor/menor
+count-consec
+eliminar-n: elimina los primeros n de una lista
+distanciaPunto: distancia entre dos puntos a y b cuando los puntos son listas impropias (x.y)
+-------------------------------------------------------------------------------------------------------
+(define tamaño
+  (lambda (ls)
+        (if(null? ls)
+               0
+               (+ (tamaño (cdr ls)) 1)
+         )
+   )
+)
+--------------------------------------------------------------------------------------------------------
+(define concatenar
+  (lambda (l1 l2)
+          (if (null? l1)
+              l2
+             (if (null? (cdr l1))
+             (cons (car l1) l2 )
+             (cons (car l1) (concatenar (cdr l1) l2))
+              )
+          )
+   )
+)
+---------------------------------------------------------------------------------------------------------
+(define potencia
+  (lambda (x n)
+    (if (eq? n 0)
+        1
+        (* (potencia x (- n 1)) x)
+     )
+   )
+)
+----------------------------------------------------------------------------------------------------------
+(define factorial
+  (lambda (x)
+    (if (= x 0)
+        1
+        (* (factorial (- x 1)) x)
+     )
+  )
+)
+----------------------------------------------------------------------------------------------------------
+(define invertir
+  (lambda (lis)
+    (if (null? lis)
+        lis
+        (concatenar (invertir (cdr lis)) (list (car lis)))
+     )
+  )
+)
+-----------------------------------------------------------------------------------------------------------
+(define count-elem
+  (lambda(e l)
+    (if (null? l))
+        0
+        (if  (eq? (car l) e)
+        (+ (count-elem e (cdr l)) 1)
+        (count-elem e (cdr l))
+        )
+     )
+  )
+)
+------------------------------------------------------------------------------------------------------------
+(define agregarAlFinal
+  (lambda (x lis)
+     (if (null? lis)
+         (list x)
+         (concatenar (list (car lis)) (AgregarAlFinal x (cdr lis)))
+      )
+  )
+)
+-------------------------------------------------------------------------------------------------------------
+(define buscarEn
+   (lambda(x lista)
+     (if (null? lista)
+         #f
+         (if (eq? (car lista) x)
+             #t
+             (buscarEn x (cdr lista))
+         )
+     )
+   )
+)
+--------------------------------------------------------------------------------------------------------------
+(define eliminar
+  (lambda (a l)
+    (if (null? l)
+        l
+        (if (eq? (car l) a)
+            (eliminar a (cdr l))
+            (cons (car l) (eliminar a (cdr l)))
+         )
+     )
+   )
+ )
+
+---------------------------------------------------------------------------------------------------------------
+(define ubicarEnLista
+  (lambda (e l2)
+    (if (null? l2)
+        (cons e l2)
+        (if (< e (car l2))
+            (cons e l2)
+            (cons (car l2) (ubicarEnLista e (cdr l2)))
+        )
+    )
+    )
+  )
+
+(define ordenarListaDeNumeros
+  (lambda (l l2)
+    (if (null? l)
+        l2
+        (ordenarListaDeNumeros (cdr l) (ubicarEnLista (car l) l2))
+    )
+  )
+)
+---------------------------------------------------------------------------------------------------------------
+(define mayor 
+    (lambda (l candidato)
+         (cond
+	
+             ((empty? l) candidato)
+		
+             ((> candidato (car l)) (mayor (cdr l) candidato))
+              ;Cambiando el signo, devuelvo el menor de una lista
+		
+             (else (mayor (cdr l) (car l)))
+           )
+
+    )
+
+)
+----------------------------------------------------------------------------------------
+(define count-consec
+  (lambda (x lis)
+    (if (null? lis)
+         0
+         (if (null? (cdr lis))
+            (if (equal? (car lis) x)
+                1
+                0
+             )
+            (if (and (eq? (car lis) x) (not (eq? (cadr lis) x)))
+                    1
+                    (+ (count-consec x (cdr lis)) 1)
+                 )
+          )
+   )
+  )
+)
+----------------------------------------------------------------------
+(define eliminar
+  (lambda (n lis)
+    (if (eq? n 0)
+        lis
+        (eliminar (- n 1) (cdr lis))
+     )
+  )
+)
+----------------------------------------------------------------------
+(define potencia
+  (lambda (x n)
+    (if (eq? n 0)
+        1
+        (* (potencia x (- n 1)) x)
+     )
+   )
+)
+(define distanciaPunto
+  (lambda (a b)
+    (sqrt (+ (potencia (- (cdr b) (cdr a)) 2) (potencia (- (car b) (car a)) 2)))
+    )
+  )
